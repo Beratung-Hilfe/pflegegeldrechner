@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pflegegeldrechner | Beratung & Hilfe Holzinger e.U.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #2a5783;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        main {
+            max-width: 700px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #2a5783;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #2a5783;
+            color: white;
+            padding: 12px 20px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-left: 5px solid #43a047;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+            background-color: #eee;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Pflegegeldrechner</h1>
+    <p>von Beratung & Hilfe Holzinger e.U.</p>
+</header>
+
+<main>
+    <h2>Pflegegeld online berechnen</h2>
+    <p>Finden Sie in wenigen Schritten heraus, ob ein Anspruch auf Pflegegeld besteht und in welcher Stufe.</p>
+
+    <form id="pflegegeldForm">
+        <label for="stunden">Pflegebedarf pro Monat (in Stunden):</label>
+        <input type="number" id="stunden" min="0" required>
+
+        <label for="dauerpflege">Dauerhafte Pflegebedürftigkeit?</label>
+        <select id="dauerpflege" required>
+            <option value="">Bitte auswählen</option>
+            <option value="ja">Ja</option>
+            <option value="nein">Nein</option>
+        </select>
+
+        <button type="submit">Pflegegeld berechnen</button>
+    </form>
+
+    <div id="ergebnis" class="result"></div>
+</main>
+
+<footer>
+    © 2025 Beratung & Hilfe Holzinger e.U. | www.beratung-hilfe.at
+</footer>
+
+<script>
+    document.getElementById('pflegegeldForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const stunden = parseInt(document.getElementById('stunden').value);
+        const dauerpflege = document.getElementById('dauerpflege').value;
+        const ergebnis = document.getElementById('ergebnis');
+
+        let stufe = 0;
+
+        if (dauerpflege === 'ja') {
+            if (stunden >= 65 && stunden < 95) stufe = 1;
+            else if (stunden >= 95 && stunden < 120) stufe = 2;
+            else if (stunden >= 120 && stunden < 160) stufe = 3;
+            else if (stunden >= 160 && stunden < 180) stufe = 4;
+            else if (stunden >= 180 && stunden < 300) stufe = 5;
+            else if (stunden >= 300 && stunden < 480) stufe = 6;
+            else if (stunden >= 480) stufe = 7;
+        }
+
+        const geld = [0, 200.80, 370.30, 577.00, 865.10, 1175.20, 1641.10, 2156.60];
+
+        if (stufe > 0) {
+            ergebnis.innerHTML = `<strong>Pflegestufe ${stufe}</strong><br>Monatliches Pflegegeld: <strong>${geld[stufe].toFixed(2)} €</strong>`;
+        } else {
+            ergebnis.innerHTML = `Kein Anspruch auf Pflegegeld gemäß den angegebenen Daten.`;
+        }
+
+        ergebnis.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
